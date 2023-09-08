@@ -41,7 +41,8 @@ class MessageLogger {
      *      Further details about where the property has been moved
      */
     static nagUserOfDiscontinuedProperty(String propertyName, String advice) {
-        SingleMessageLogger.nagUserWith("The $propertyName property ${getDeprecationMessage()}. ", advice)
+        //SingleMessageLogger.nag
+                //nagUserWith("The $propertyName property ${getDeprecationMessage()}. ", advice)
     }
 
     /**
@@ -63,6 +64,7 @@ class MessageLogger {
      *      the message to show the user
      */
     static nag(String advice) {
-        SingleMessageLogger.nagUserWith(advice, null)
+        //SingleMessageLogger.nog
+          //      nagUserWith(advice, null)
     }
 }

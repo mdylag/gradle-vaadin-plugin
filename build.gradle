@@ -62,7 +62,8 @@ sourceSets {
         resources {
             srcDir file('src/functionalTest/resources')
         }
-        compileClasspath += sourceSets.main.output + configurations.testRuntime
+
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeOnly
         runtimeClasspath += output + compileClasspath
     }
 }
@@ -74,11 +75,29 @@ sourceSets {
  **********************************************************************************************************************/
 repositories{
 	mavenCentral()
+    jcenter()
+    maven {
+        url = project.property('com.bcplatforms.nexus.internal.url')
+        allowInsecureProtocol = true
+        setAllowInsecureProtocol(true)
+        credentials {
+            username = project.property('com.bcplatforms.nexus.internal.username')
+            password = project.property('com.bcplatforms.nexus.internal.password')
+
+        }
+    }
 }
 
 configurations {
     deploy
     proxyTest
+    testRuntimeOnly {
+        // This configuration is an "outgoing" configuration, it's not meant to be resolved
+        canBeResolved = true
+        // As an outgoing configuration, explain that consumers may want to consume it
+        //assert canBeConsumed
+    }
+
 }
 
 dependencies {
@@ -139,7 +158,7 @@ processResources {
 
     // Directory where previously built versions are located
     def debugDir = new File(project.buildDir, 'libs').canonicalPath
-
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     // Mark processed resources as dirty if build properties change
     inputs.property('version', project.version)
     inputs.property('debugdir', debugDir)
@@ -404,7 +423,32 @@ pluginBundle {
  *
  **********************************************************************************************************************/
 wrapper {
-    gradleVersion = '5.6'
+    gradleVersion = '7.3.3'
     distributionUrl = distributionUrl.replace('bin', 'all') // Download sources
 }
 
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.property('com.bcplatforms.nexus.internal.username')
+                password = project.property('com.bcplatforms.nexus.internal.password')
+            }
+            url = project.property('com.bcplatforms.nexus.internal-releases.url')
+            setAllowInsecureProtocol(true)
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId group
+            artifactId "com.devsoap.plugin.vaadin"
+            version version
+            from components.java
+            pom.withXml {
+                asNode().appendNode('description', "BC Platforms security API")
+            }
+
+
+        }
+    }
+}

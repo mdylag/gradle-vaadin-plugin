@@ -66,8 +66,7 @@ class CreateDesignTask extends DefaultTask{
     /**
      * Should we output the templates available to the console instead of creating a design.
      */
-    @Option(option = 'templates', description =
-            'Lists the available templates. Add your templates to .vaadin/designer/templates to use them here.')
+    @Option(option = 'templates', description = 'Lists the available templates. Add your templates to .vaadin/designer/templates to use them here.')
     boolean listTemplates = false
 
     /**

@@ -85,7 +85,7 @@ class VersionCheckTask extends DefaultTask {
      * @param versionCacheFile
      *      the version cache file
      */
-    @InputFile
+    //@InputFile
     void setVersionCacheFile(File versionCacheFile) {
         this.versionCacheFile = versionCacheFile
     }
